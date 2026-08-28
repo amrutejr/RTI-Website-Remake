@@ -12,4 +12,12 @@ export default defineConfig({
     // nitro/vite builds from this
     server: { entry: "server" },
   },
+  vite: {
+    server: {
+      // Bind IPv4 on all interfaces so phones/other LAN devices can connect.
+      // Lovable sandbox still overrides this to host "::" / port 8080.
+      host: "0.0.0.0",
+      allowedHosts: true,
+    },
+  },
 });
