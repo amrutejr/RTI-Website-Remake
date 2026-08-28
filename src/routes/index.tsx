@@ -20,6 +20,10 @@ import {
 
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
+import { StatsBanner } from "@/components/stats-banner";
+import { CitizenFilingJourney } from "@/components/citizen-filing-journey";
+import { FourStepProcess } from "@/components/four-step-process";
+import { SampleComplaints } from "@/components/sample-complaints";
 import { faqCount } from "@/content/faq";
 import heroArt from "@/assets/hero-transparency.jpg";
 import citizenPhoto from "@/assets/citizen-filing.jpg";
@@ -228,6 +232,9 @@ function Index() {
           </div>
         </section>
 
+        {/* ════════ KEY STATS BANNER ════════ */}
+        <StatsBanner />
+
         {/* Actions */}
         <section id="actions" className="mx-auto max-w-6xl px-5 py-20 md:py-24">
           <div className="flex flex-wrap items-end justify-between gap-6">
@@ -273,29 +280,46 @@ function Index() {
                 </a>
               );
             })}
-
           </div>
         </section>
 
-        {/* Process */}
-        <section id="process" className="border-y border-border bg-paper">
-          <div className="rule-grid">
-            <div className="mx-auto max-w-6xl px-5 py-20 md:py-24">
-              <p className="text-eyebrow text-muted-foreground">The process</p>
-              <h2 className="mt-3 max-w-xl text-4xl md:text-5xl">
-                From question to answer in four steps
-              </h2>
+        {/* ════════ CITIZEN-FIRST FILING JOURNEY ════════ */}
+        <CitizenFilingJourney />
 
-              <div className="mt-14 grid gap-x-8 gap-y-12 md:grid-cols-2 lg:grid-cols-4">
-                {steps.map((s) => (
-                  <div key={s.n} className="border-t-2 border-ink pt-5">
-                    <span className="font-display text-3xl text-saffron">{s.n}</span>
-                    <h3 className="mt-3 text-xl">{s.title}</h3>
-                    <p className="mt-2.5 text-sm leading-relaxed text-muted-foreground">
-                      {s.body}
-                    </p>
-                  </div>
-                ))}
+        {/* ════════ FOUR STEP PROCESS ════════ */}
+        <FourStepProcess />
+
+        {/* ════════ SAMPLE COMPLAINTS & SAFETY ════════ */}
+        <section id="sample-complaints" className="mx-auto max-w-6xl px-5 py-20 md:py-24">
+          <div className="grid gap-8 lg:grid-cols-[1.1fr_0.9fr] lg:items-start">
+            <SampleComplaints />
+
+            <div className="surface-card p-6 md:p-8">
+              <p className="text-eyebrow text-muted-foreground">Safety & Responsibility</p>
+              <h3 className="mt-2 text-2xl sm:text-3xl font-normal leading-tight text-foreground">
+                Built for responsible public information access
+              </h3>
+              <p className="mt-4 text-sm text-muted-foreground leading-relaxed">
+                RTI applications are framed around verifiable records, administrative decisions, and public expenditure rather than personal disputes.
+              </p>
+              <ul className="mt-6 space-y-3.5 text-sm leading-relaxed text-muted-foreground">
+                <li className="flex items-start gap-2.5">
+                  <span className="mt-1.5 h-1.5 w-1.5 rounded-full bg-verdant shrink-0" />
+                  <span>No real government credentials, Aadhaar data, or biometric records are ever requested or stored.</span>
+                </li>
+                <li className="flex items-start gap-2.5">
+                  <span className="mt-1.5 h-1.5 w-1.5 rounded-full bg-verdant shrink-0" />
+                  <span>The workflow supports safe testing, practice drafting, and instant validation before final submission.</span>
+                </li>
+                <li className="flex items-start gap-2.5">
+                  <span className="mt-1.5 h-1.5 w-1.5 rounded-full bg-verdant shrink-0" />
+                  <span>Requests are filtered to ensure compliance with Section 8 exemptions under the RTI Act, 2005.</span>
+                </li>
+              </ul>
+              <div className="mt-7 rounded-lg border border-border bg-secondary p-4">
+                <p className="text-xs text-secondary-foreground">
+                  💡 <strong className="font-semibold">Pro Tip:</strong> Precise requests with specific dates and file references get answered 3× faster by CPIOs.
+                </p>
               </div>
             </div>
           </div>
