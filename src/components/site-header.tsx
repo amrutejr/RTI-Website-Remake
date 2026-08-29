@@ -2,6 +2,7 @@ import { Link } from "@tanstack/react-router";
 import { useEffect, useId, useRef, useState } from "react";
 import { ArrowRight, ChevronDown, Menu, X } from "lucide-react";
 import emblem from "@/assets/ashoka-emblem.png";
+import { LanguageSelect } from "@/components/language-select";
 
 const TEXT_SIZE_KEY = "rti-text-size";
 type TextSize = "small" | "default" | "large";
@@ -84,7 +85,7 @@ export function SiteHeader() {
         Skip to main content
       </a>
 
-      <div className="bg-ink text-ink-foreground/80">
+      <div className="relative z-50 bg-ink text-ink-foreground/80">
         <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-2 px-5 py-2 text-[11px] tracking-wide">
           <p className="flex items-center gap-2">
             <img
@@ -96,6 +97,7 @@ export function SiteHeader() {
           </p>
           <div className="flex items-center gap-4">
             <span className="hidden sm:inline">भारत सरकार</span>
+            <LanguageSelect />
             <div className="flex items-center gap-1" role="group" aria-label="Text size">
               <button
                 type="button"

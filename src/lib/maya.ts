@@ -187,20 +187,45 @@ function extractState(text: string) {
   return indianStates.find((s) => lower.includes(s.toLowerCase())) ?? "";
 }
 
+const GREETING_ONLY =
+  /^(hi|hello|hey|namaste|namaskar|good (morning|afternoon|evening)|ok|okay|thanks|thank you)[.!\s]*$/i;
+
+export function hasDraftContent(slots: FileSlots) {
+  const body = (slots.records || slots.issue).trim();
+  if (!body) return false;
+  if (body.length < 24 && GREETING_ONLY.test(body)) return false;
+  return true;
+}
+
+function hasBlankNumberedPoint(text: string) {
+  return /^\s*\d+\.\s*$/m.test(text);
+}
+
 export function assembleRtiText(slots: FileSlots) {
-  const lines: string[] = [];
-  lines.push("Please provide the following information under the RTI Act, 2005:");
-  lines.push("");
-  lines.push(`1. ${slots.records || slots.issue}`);
-  if (slots.period) lines.push(`2. Kindly confine the reply to the period: ${slots.period}.`);
-  lines.push(
-    `${slots.period ? "3" : "2"}. Certified copies or electronic copies of the relevant records, file notings and orders, if any.`,
+  const points: string[] = [];
+  const request = (slots.records || slots.issue).trim();
+  if (request) points.push(request);
+  if (slots.period.trim()) points.push(`Kindly confine the reply to the period: ${slots.period}.`);
+  points.push(
+    "Certified copies or electronic copies of the relevant records, file notings and orders, if any.",
   );
-  lines.push("");
-  lines.push(
+
+  return [
+    "Please provide the following information under the RTI Act, 2005:",
+    "",
+    ...points.map((point, i) => `${i + 1}. ${point}`),
+    "",
     "This is a request for existing records, not for opinions or justifications. I am a citizen of India.",
-  );
-  return lines.join("\n").slice(0, 3000);
+  ]
+    .join("\n")
+    .slice(0, 3000);
+}
+
+export function resolveDraftPreview(raw: unknown, slots: FileSlots, readyToFile = false) {
+  if (!hasDraftContent(slots) && !readyToFile) return undefined;
+  const fromModel = typeof raw === "string" ? raw.trim() : "";
+  if (fromModel && !hasBlankNumberedPoint(fromModel)) return fromModel.slice(0, 3000);
+  return assembleRtiText(slots);
 }
 
 export function subjectLine(slots: FileSlots) {

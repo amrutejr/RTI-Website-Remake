@@ -2,8 +2,8 @@ import { createServerFn } from "@tanstack/react-start";
 
 import { faqGroups } from "@/content/faq";
 import {
-  assembleRtiText,
   emptySlots,
+  resolveDraftPreview,
   slotsReady,
   type FileSlots,
   type MayaMode,
@@ -40,6 +40,7 @@ Rules:
 - Never claim a real public authority received the filing. This is a design concept; filings stay in the browser.
 - Helpdesk: 011-24010690/691, helprtionline-dopt[at]nic[dot]in.
 - When filing, collect: issue, records/dates, Central ministry (from the list), name, email, 10-digit mobile, address, state, 6-digit PIN, BPL yes/no. Then show a draft and wait for explicit confirmation before readyToFile=true.
+- Do not set draftPreview until slots.issue or slots.records has real text. Never leave a numbered point blank (no "1." with nothing after it).
 - Ministries you may assign: ${ministries.join("; ")}.
 - Default publicAuthority to the first CPIO of that ministry if the user does not name one.
 
@@ -177,12 +178,7 @@ export const askMaya = createServerFn({ method: "POST" })
       ? (parsed["chips"] as unknown[]).filter((c): c is string => typeof c === "string").slice(0, 6)
       : undefined;
     const readyToFile = parsed?.["readyToFile"] === true && slotsReady(slots);
-    const draftPreview =
-      typeof parsed?.["draftPreview"] === "string" && parsed["draftPreview"].trim()
-        ? parsed["draftPreview"]
-        : readyToFile || mode === "file"
-          ? assembleRtiText(slots)
-          : undefined;
+    const draftPreview = resolveDraftPreview(parsed?.["draftPreview"], slots, readyToFile);
 
     return {
       mode,

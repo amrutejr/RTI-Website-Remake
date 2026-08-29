@@ -14,6 +14,7 @@ import { reportLovableError } from "../lib/lovable-error-reporting";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { MayaWidget } from "@/components/maya-widget";
+import { LanguageProvider } from "@/components/language-provider";
 
 function NotFoundComponent() {
   return (
@@ -119,10 +120,11 @@ function RootShell({ children }: { children: ReactNode }) {
       <body>
         <script
           dangerouslySetInnerHTML={{
-            __html: `(function(){try{var s=localStorage.getItem("rti-text-size");if(s==="small"||s==="large")document.documentElement.dataset.textSize=s}catch(e){}})();`,
+            __html: `(function(){try{var s=localStorage.getItem("rti-text-size");if(s==="small"||s==="large")document.documentElement.dataset.textSize=s;if(localStorage.getItem("rti-lang")==="hi")document.documentElement.lang="hi"}catch(e){}})();`,
           }}
         />
-        {children}
+        <script src="https://js.puter.com/v2/" />
+        <LanguageProvider>{children}</LanguageProvider>
         <Scripts />
       </body>
     </html>

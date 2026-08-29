@@ -54,10 +54,12 @@ export function MayaChat({
   ]);
   const [input, setInput] = useState("");
   const [busy, setBusy] = useState(false);
-  const endRef = useRef<HTMLDivElement>(null);
+  const scrollerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    endRef.current?.scrollIntoView({ behavior: "smooth" });
+    const scroller = scrollerRef.current;
+    if (!scroller) return;
+    scroller.scrollTo({ top: scroller.scrollHeight, behavior: "smooth" });
   }, [messages, busy]);
 
   const reset = (next: MayaMode) => {
@@ -187,7 +189,7 @@ export function MayaChat({
 
   return (
     <div className={`flex h-full min-h-0 flex-col ${compact ? "" : ""}`}>
-      <div className="min-h-0 flex-1 space-y-4 overflow-y-auto px-4 py-4">
+      <div ref={scrollerRef} className="min-h-0 flex-1 space-y-4 overflow-y-auto px-4 py-4">
         {messages.map((msg) => (
           <div key={msg.id} className={`flex gap-2.5 ${msg.role === "user" ? "justify-end" : ""}`}>
             {msg.role === "maya" && (
@@ -242,7 +244,6 @@ export function MayaChat({
             Maya is typing…
           </div>
         )}
-        <div ref={endRef} />
       </div>
 
       <form
@@ -272,6 +273,7 @@ export function MayaChat({
             onKeyDown={(e) => {
               if (e.key === "Enter" && !e.shiftKey) {
                 e.preventDefault();
+                e.stopPropagation();
                 speak(input);
               }
             }}
